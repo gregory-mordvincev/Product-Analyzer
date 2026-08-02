@@ -23,7 +23,7 @@ with open('data/product_list.txt', 'w') as f:
     for _ in range(iteration):
         f.write(f'{choice(products)}\n')
 
-with open('product_list.txt', 'r') as f:
+with open('data/product_list.txt', 'r') as f:
     text = f.read()
 
 print(text)
