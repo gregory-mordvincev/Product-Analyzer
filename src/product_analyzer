@@ -1,0 +1,18 @@
+with open('data/product_list.txt', 'r') as f:
+    data = f.read().split()
+
+products = {} 
+for item in data:
+    if item in products: 
+        products[item] += 1 
+    else:
+        products[item] = 1
+
+with open('output/report.txt', 'w', encoding='utf-8') as f:
+    f.write(f'========== ОТЧЁТ ==========\n\nСтатистика продаж\n')
+    for key, value in sorted(products.items(), key=lambda x: (-x[1], x[0])):
+        f.write(f'{key}: {value}\n')
+
+print(f'========== ОТЧЁТ ==========\n\nСтатистика продаж\n')
+for key, value in sorted(products.items(), key=lambda x: (-x[1], x[0])):
+    print(f'{key}: {value}')
