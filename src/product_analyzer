@@ -1,3 +1,15 @@
+"""
+Project: Product Analyzer
+Version: 1.0
+
+Author: Mordvincev Gregory (Мордвинцев Григорий)
+
+Description:
+Reads a product sales journal,
+analyzes product frequencies,
+and generates a sales report.
+"""
+
 with open('data/product_list.txt', 'r') as f:
     data = f.read().split()
 
