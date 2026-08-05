@@ -1,6 +1,6 @@
 """
-Project: Product Analyzer
-Version: 1.0
+Project: Sales Generator
+Version: 1.1
 
 Author: Mordvincev Gregory (Мордвинцев Григорий)
 
@@ -9,7 +9,10 @@ Generates a random product sales journal
 for testing the Product Analyzer application.
 """
 
+# Import 
 from random import choice
+
+# Product list
 products = ["молоко", "сыр", "масло сливочное", "йогурт", "сметана",
     "чай чёрный", "чай зелёный", "каркадэ", "кофе", "какао", "яйца",
     "масло подсолнечное", "масло оливковое", "сахар", "соль",
@@ -18,15 +21,30 @@ products = ["молоко", "сыр", "масло сливочное", "йогу
     "чеснок", "лук", "томаты", "огурцы", "картофель", "морковь",
     "капуста", "свёкла", "салат листовой", "перец сладкий", "перец чили"]
 
-iteration = int(input("Введите количество продаж: "))
-with open('data/product_list.txt', 'w') as f:
-    for _ in range(iteration):
-        f.write(f'{choice(products)}\n')
+# User input
+while True:
+    iteration = input("Введите количество продаж: ")
+    try:
+        iteration = int(iteration)
+        break
+    except ValueError:
+        print('Неверный ввод, попробуйте снова')
 
-with open('data/product_list.txt', 'r') as f:
+# Sales generation
+if iteration < 0:
+    print('Количество продаж не может быть отрицательным')
+elif iteration == 0:
+    print('Продаж не зарегистрировано')
+else:
+    with open('data/product_list.txt', 'w', encoding='utf-8') as f:
+        for _ in range(iteration):
+            f.write(f'{choice(products)}\n')
+
+# Reading a file
+with open('data/product_list.txt', 'r', encoding='utf-8') as f:
     text = f.read()
 
-print(text)
+# Output
 print(f'''Журнал продаж успешно создан.
 Количество записей: {len(text.split())}.
-Файл: {"product_list.txt"}''')
+Файл: {"data/product_list.txt"}''')
