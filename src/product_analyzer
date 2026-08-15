@@ -1,6 +1,6 @@
 """
 Project: Product Analyzer
-Version: 1.0
+Version: 1.1
 
 Author: Mordvincev Gregory (Мордвинцев Григорий)
 
@@ -10,22 +10,67 @@ analyzes product frequencies,
 and generates a sales report.
 """
 
-with open('data/product_list.txt', 'r') as f:
-    data = f.read().split('\n')
+# Import
+import sys
 
+# Reading a file
+try:
+    with open('data/product_list.txt', 'r', encoding='utf-8') as f:
+        data = f.read().split('\n')
+except FileNotFoundError:
+    print(f'''Файл data/product_list.txt не найден.
+Сначала запустите Sales Generator.''')
+    sys.exit()
+
+# Sales Counting
 products = {}
 for item in data:
-    if not item.isspace() and len(item) > 0:
+      if not item.isspace() and len(item) > 0:
         if item in products:
             products[item] += 1
         else:
             products[item] = 1
 
-with open('output/report.txt', 'w', encoding='utf-8') as f:
-    f.write(f'========== ОТЧЁТ ==========\n\nСтатистика продаж\n')
-    for key, value in sorted(products.items(), key=lambda x: (-x[1], x[0])):
-        f.write(f'{key}: {value}\n')
+unique_products = len(set(item for item in data if item and not item.isspace()))
+count_sales = sum(1 for item in data if item and not item.isspace())
 
-print(f'========== ОТЧЁТ ==========\n\nСтатистика продаж\n')
-for key, value in sorted(products.items(), key=lambda x: (-x[1], x[0])):
-    print(f'{key}: {value}')
+if count_sales == 0:
+      print(f'========== ОТЧЁТ ==========\n\nСтатистика продаж\nПродажи отсутствуют')
+      with open('output/report.txt', 'w', encoding='utf-8') as f:
+          f.write(f'========== ОТЧЁТ ==========\n\nСтатистика продаж\nПродажи отсутствуют')
+else:
+# Most popular and most rare products
+    maximum = minimum = None
+    high_sales_prod, low_sales_prod = [], []
+    for key, value in products.items():
+        # maximum
+        if maximum is None or maximum < value:
+            high_sales_prod.clear()
+            maximum = value
+            high_sales_prod.append(key)
+        elif maximum == value:
+            high_sales_prod.append(key)
+        # minimum
+        if minimum is None or minimum > value:
+            low_sales_prod.clear()
+            minimum = value
+            low_sales_prod.append(key)
+        elif minimum == value:
+            low_sales_prod.append(key)
+
+# Writing to a file
+    with open('output/report.txt', 'w', encoding='utf-8') as f:
+        f.write(f'========== ОТЧЁТ ==========\n\nСтатистика продаж\n')
+        f.write(f'Всего продаж: {count_sales}\n\nУникальных товаров: {unique_products}\n')
+        f.write(f'Самый популярный товар: {", ".join(high_sales_prod)} - {maximum} ед.\n')
+        f.write(f'Самый редкий товар: {", ".join(low_sales_prod)} - {minimum} ед.\n')
+        for key, value in sorted(products.items(), key=lambda x: (-x[1], x[0])):
+            f.write(f'{key}: {value}\n')
+    
+# Information output
+    print(f'========== ОТЧЁТ ==========\n\nСтатистика продаж\n')
+    print(f'Всего продаж: {count_sales}\n\nУникальных товаров: {unique_products}\n')
+    print(f'Самый популярный товар: {", ".join(high_sales_prod)} - {maximum} ед.\n')
+    print(f'Самый редкий товар: {", ".join(low_sales_prod)} - {minimum} ед.\n')
+    for key, value in sorted(products.items(), key=lambda x: (-x[1], x[0])):
+        print(f'{key}: {value}')
