@@ -1,6 +1,6 @@
 """
 Project: Sales Generator
-Version: 1.1
+Version: 1.1.1
 
 Author: Mordvincev Gregory (Мордвинцев Григорий)
 
@@ -9,7 +9,7 @@ Generates a random product sales journal
 for testing the Product Analyzer application.
 """
 
-# Import 
+# Import
 from random import choice
 
 # Product list
@@ -34,14 +34,16 @@ while True:
 if iteration < 0:
     print('Количество продаж не может быть отрицательным')
 elif iteration == 0:
+    with open('product_list.txt', 'w', encoding='utf-8') as f:
+        pass
     print('Продаж не зарегистрировано')
 else:
-    with open('data/product_list.txt', 'w', encoding='utf-8') as f:
+    with open('product_list.txt', 'w', encoding='utf-8') as f:
         for _ in range(iteration):
             f.write(f'{choice(products)}\n')
 
 # Reading a file
-with open('data/product_list.txt', 'r', encoding='utf-8') as f:
+with open('product_list.txt', 'r', encoding='utf-8') as f:
     text = f.read()
 
 # Output
